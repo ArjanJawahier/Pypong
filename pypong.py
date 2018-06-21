@@ -3,9 +3,12 @@
 import pygame
 import modules.player as player
 import modules.ball as ball
+import modules.block as block
 
 displayWidth = 800
 displayHeight = 600
+blockRows = 30
+blockColumns = 20
 
 black = (0,0,0)
 white = (255,255,255)
@@ -22,6 +25,14 @@ clock = pygame.time.Clock()
 
 playerObject = player.Player(displayWidth, displayHeight)
 ballObject = ball.Ball(displayWidth, displayHeight)
+gameElements = [playerObject, ballObject]
+
+def generateBlocks():
+	for i in range(0,blockRows):
+		for j in range(0, blockColumns):
+			blockX = 0.5*displayWidth + 17*j
+			blockY = 0.1*displayHeight + 17*i
+			gameElements.append(block.Block(blockX, blockY))
 
 def updateObjects():
 	for item in gameElements:
@@ -29,18 +40,17 @@ def updateObjects():
 
 def blitObjects():
 	for item in gameElements:
-		print(item, item.x, item.y)
 		gameDisplay.blit(item.sprite, (item.x, item.y))
 
 def gameLoop():
 	gameExit = False
 	while not gameExit:
-		gameDisplay.fill(white)
+		gameDisplay.fill(black)
 		updateObjects()
 		blitObjects()
 		pygame.display.flip()
 		clock.tick(60)
 
-gameElements = [playerObject, ballObject]
+generateBlocks()
 gameLoop()
 #quitting can be found in the player class (event handling)
