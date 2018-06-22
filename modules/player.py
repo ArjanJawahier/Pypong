@@ -1,13 +1,10 @@
 import pygame
 import random
+import modules.rect as rect
 
-class Player:
-	def __init__(self, displayWidth, displayHeight):
-		self.sprite = pygame.image.load('./Sprites/playerRed.png') 
-		self.height = self.sprite.get_height()
-		self.width = self.sprite.get_width()
-		self.x = displayWidth * 0.1
-		self.y = displayHeight * 0.45
+class Player(rect.Rect):
+	def __init__(self, x, y, spriteFile, displayWidth, displayHeight):
+		rect.Rect.__init__(self, x, y, spriteFile)
 		self.displayWidth = displayWidth
 		self.displayHeight = displayHeight
 		self.speedIncrease = 10

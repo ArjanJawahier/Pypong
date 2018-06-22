@@ -23,24 +23,27 @@ gameDisplay = pygame.display.set_mode((displayWidth, displayHeight))
 pygame.display.set_caption('Pypong')
 clock = pygame.time.Clock()
 
-playerObject = player.Player(displayWidth, displayHeight)
+playerObject = player.Player(displayWidth*0.1, displayHeight*0.45, './Sprites/playerRed.png', displayWidth, displayHeight)
 ballObject = ball.Ball(displayWidth, displayHeight)
 gameElements = [playerObject, ballObject]
+gameBlocks = []
 
 def generateBlocks():
 	for i in range(0,blockRows):
 		for j in range(0, blockColumns):
 			blockX = 0.5*displayWidth + 17*j
 			blockY = 0.1*displayHeight + 17*i
-			gameElements.append(block.Block(blockX, blockY))
+			gameBlocks.append(block.Block(blockX, blockY, './Sprites/ball.png'))
 
 def updateObjects():
-	for item in gameElements:
-		item.update()
+	playerObject.update()
+	ballObject.update(gameBlocks, playerObject)
 
 def blitObjects():
 	for item in gameElements:
 		gameDisplay.blit(item.sprite, (item.x, item.y))
+	for block in gameBlocks:
+		gameDisplay.blit(block.sprite, (block.x, block.y))
 
 def gameLoop():
 	gameExit = False
