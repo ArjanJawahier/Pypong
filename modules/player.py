@@ -4,10 +4,14 @@ import modules.rect as rect
 
 class Player(rect.Rect):
 	def __init__(self, x, y, spriteFile, displayWidth, displayHeight):
-		rect.Rect.__init__(self, x, y, spriteFile)
+		self.sprite = pygame.image.load(spriteFile)
+		self.x = x
+		self.y = y
+		self.height = self.sprite.get_height()
+		self.width = self.sprite.get_width()
 		self.displayWidth = displayWidth
 		self.displayHeight = displayHeight
-		self.speedIncrease = 10
+		self.speedIncrease = 6
 		self.xSpeed = 0
 		self.ySpeed = 0
 		self.up = False

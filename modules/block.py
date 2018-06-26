@@ -15,9 +15,6 @@ class Block(rect.Rect):
 			blue = 0
 		return (red, green, blue)
 
-	def __init__(self, x, y, spriteName):
-		rect.Rect.__init__(self, x, y, spriteName)
+	def __init__(self, x, y, w, h):
+		rect.Rect.__init__(self, x, y, w, h)
 		self.color = self.determineColor()
-		self.sprite = self.sprite.copy()
-		self.sprite.fill((0, 0, 0, 0), None, pygame.BLEND_RGBA_MULT)
-		self.sprite.fill(self.color, None, pygame.BLEND_RGBA_ADD)

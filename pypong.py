@@ -33,7 +33,7 @@ def generateBlocks():
 		for j in range(0, blockColumns):
 			blockX = 0.5*displayWidth + 17*j
 			blockY = 0.1*displayHeight + 17*i
-			gameBlocks.append(block.Block(blockX, blockY, './Sprites/ball.png'))
+			gameBlocks.append(block.Block(blockX, blockY, 16, 16))
 
 def updateObjects():
 	playerObject.update()
@@ -43,17 +43,60 @@ def blitObjects():
 	for item in gameElements:
 		gameDisplay.blit(item.sprite, (item.x, item.y))
 	for block in gameBlocks:
-		gameDisplay.blit(block.sprite, (block.x, block.y))
+		pygame.draw.rect(gameDisplay, block.color, (block.x, block.y, block.width, block.height))
+
+def createText(text, fontSize, color, centerX, centerY):
+	font = pygame.font.SysFont("comicsansms", fontSize)
+	textSurface = font.render(text, True, color)
+	textRect = textSurface.get_rect()
+	textRect.center = (centerX, centerY)
+	gameDisplay.blit(textSurface, textRect)
+
+def gameIntro():
+	intro = True
+
+	redness = 255
+	blueness = 0
+	redDecrease = True
+
+	while intro:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				quit()
+			if event.type == pygame.KEYDOWN:
+				intro = False
+
+		gameDisplay.fill(black)
+		if redDecrease:
+			redness -= 1
+			blueness += 1
+		else:
+			redness += 1
+			blueness -= 1
+		if redness == 0:
+			redDecrease = False
+		elif redness == 255:
+			redDecrease = True
+		textCol = (redness, 0, blueness) #starts at red and fades to blue and back
+		createText("PYPONG", int(abs(redness-blueness)/2 + 10), textCol, displayWidth*0.5, displayHeight*0.5)
+		createText("press any key to continue", 32, textCol, displayWidth*0.5, displayHeight*0.8)
+		pygame.display.update()
+		clock.tick(30)
 
 def gameLoop():
 	gameExit = False
+	numBlocks = len(gameBlocks)
 	while not gameExit:
+		score = numBlocks - len(gameBlocks) - ballObject.timesHitLeftSide
 		gameDisplay.fill(black)
+		createText("Score: " + str(score), 22, white, displayWidth*0.05, displayHeight*0.05)
 		updateObjects()
 		blitObjects()
 		pygame.display.flip()
 		clock.tick(60)
 
+gameIntro()
 generateBlocks()
 gameLoop()
 #quitting can be found in the player class (event handling)

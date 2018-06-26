@@ -1,40 +1,31 @@
 import pygame
 
 class Rect:
-	def __init__(self, x, y, spriteFile):
-		self.sprite = pygame.image.load(spriteFile)
+	def __init__(self, x, y, w, h):
 		self.x = x
 		self.y = y
-		self.height = self.sprite.get_height()
-		self.width = self.sprite.get_width()
+		self.height = h
+		self.width = w
 
-	#only works for otherRects that are smaller than self, TODO: update that
 	def intersect(self, otherRect):
-		return ((otherRect.x > self.x and
-			otherRect.x < self.x + self.width and
-			otherRect.y > self.y and
-			otherRect.y < self.y + self.height) or
-			(otherRect.x + otherRect.width > self.x and
-			otherRect.x + otherRect.width < self.x + self.width and
-			otherRect.y > self.y and
-			otherRect.y < self.y + self.height) or
-			(otherRect.x + otherRect.width > self.x and
-			otherRect.x + otherRect.width < self.x + self.width and
-			otherRect.y + otherRect.height > self.y and
-			otherRect.y + otherRect.height < self.y + self.height) or
-			(otherRect.x > self.x and
-			otherRect.x < self.x + self.width and
-			otherRect.y + otherRect.height > self.y and
-			otherRect.y + otherRect.height < self.y + self.height))
+		return  (
+				not otherRect.x > self.x + self.width and not
+				otherRect.x + otherRect.width < self.x and not
+				otherRect.y > self.y + self.height and not
+				otherRect.y + otherRect.height < self.y
+			)
 
 	def intersectX(self, otherRect):
 		if self.intersect(otherRect):
-			return abs(otherRect.x - self.x) > abs(otherRect.y - self.y)
+			#fix this later!
+			if self.y < otherRect.y < otherRect.y + otherRect.height < self.y + self.height:
+				return True
+			return abs(otherRect.x - self.x) % otherRect.width > abs(otherRect.y - self.y) % otherRect.height
 
 	def intersectY(self, otherRect):
 		if self.intersect(otherRect):
-			return abs(otherRect.x - self.x) < abs(otherRect.y - self.y)
+			return abs(otherRect.x - self.x) % otherRect.width < abs(otherRect.y - self.y) % otherRect.height
 
 	def intersectBoth(self, otherRect):
 		if self.intersect(otherRect):
-			return abs(otherRect.x - self.x) == abs(otherRect.y - self.y)
+			return abs(otherRect.x - self.x) % otherRect.width == abs(otherRect.y - self.y) % otherRect.height

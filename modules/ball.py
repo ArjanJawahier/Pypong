@@ -10,10 +10,11 @@ class Ball:
 		self.y = displayHeight * 0.45
 		self.displayWidth = displayWidth
 		self.displayHeight = displayHeight
-		self.xSpeed = -5
+		self.xSpeed = -10
 		self.ySpeed = random.randint(-3, 3)
 		self.up = False
 		self.down = False
+		self.timesHitLeftSide = 0
 		if self.ySpeed == 0:
 			self.ySpeed = -1
 
@@ -21,6 +22,8 @@ class Ball:
 		if self.x > 0 and self.x < self.displayWidth - self.width:
 			self.x += self.xSpeed
 		else:
+			if self.x <= 0:
+				self.timesHitLeftSide += 1
 			self.bounceX()
 
 		if self.y > 0 and self.y < self.displayHeight - self.height:
@@ -30,8 +33,10 @@ class Ball:
 
 		for block in blocks:
 			if block.intersectBoth(self):
-				self.bounceX()
-				self.bounceY()
+				if self.xSpeed <= self.ySpeed:
+					self.bounceX()
+				else:
+					self.bounceY()
 				blocks.remove(block)
 				break
 			elif block.intersectX(self):
